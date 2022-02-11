@@ -6,7 +6,7 @@ import {
     Modal, ModalBody,
     ModalContent,
     ModalOverlay,
-    useDisclosure, useNumberInput, HStack, Input, VStack, Center, Text
+    useDisclosure, useNumberInput, HStack, Input, VStack, Center, Text, Flex
 } from "@chakra-ui/react";
 import {WishItem} from "../model/WishItem";
 import React, {PropsWithChildren} from "react";
@@ -43,34 +43,38 @@ export const WishItemComponent = (props: PropsWithChildren<Props>) => {
 
     return (
         <>
-        <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' onClick={onOpen}>
+        <Flex h="md" maxH="lg" borderWidth='1px' borderRadius='lg' overflow='hidden' onClick={!isFulfilled ? onOpen : () => {}} flexDirection="column">
             <Image
                 w='100%'
                 h='50%'
                 objectFit='cover' src={props.wishItem.imatge} alt={"Imatge " + props.wishItem.item} />
 
-            <Box p='6'>
+            <Flex p='6' h='50%' flexDirection="column">
                 <Box
                     mt='1'
                     fontWeight='semibold'
                     as='h4'
                     lineHeight='tight'
+                    textAlign='center'
                 >
                     {props.wishItem.item}
                 </Box>
 
                 <Box>
-                    <Badge borderRadius='full' px='2' colorScheme={isFulfilled ? 'gray' : 'teal'}>
-                        Tenim actualment: {props.wishItem.tenim}/{props.wishItem.total}
+                    <Badge marginTop='4px' display="table" margin="0 auto" borderRadius='full' px='2' colorScheme={isFulfilled ? 'red' : 'teal'} alignContent="center">
+                        En tenim: {props.wishItem.tenim}/{props.wishItem.total}
                     </Badge>
                 </Box>
-                {props.wishItem.comprare != undefined && props.wishItem.comprare > 0 && (<Box>
-                    <Badge borderRadius='full' px='2' colorScheme={'green'}>
-                        Vols comprar: {props.wishItem.comprare}
+                {props.wishItem.comprare != undefined && props.wishItem.comprare > 0 && (<Box marginTop='4px'>
+                    <Badge display="table" margin="0 auto" borderRadius='full' px='2' colorScheme={'green'}>
+                        En regalo: {props.wishItem.comprare}
                     </Badge>
                 </Box>)}
-            </Box>
-        </Box>
+                <Button marginTop="auto" colorScheme={isFulfilled ? 'gray' : 'yellow'}>
+                    Jo us ho regalo!
+                </Button>
+            </Flex>
+        </Flex>
         <Modal isOpen={isOpen} onClose={onClose} size="lg">
             <ModalOverlay />
             <ModalContent>
@@ -93,7 +97,7 @@ export const WishItemComponent = (props: PropsWithChildren<Props>) => {
 
                         <Box>
                             <Badge borderRadius='full' px='2' colorScheme={isFulfilled ? 'gray' : 'teal'}>
-                                Tenim actualment: {props.wishItem.tenim}/{props.wishItem.total}
+                                En tenim: {props.wishItem.tenim}/{props.wishItem.total}
                             </Badge>
                         </Box>
                         {props.wishItem.comentaris != '' && (<Box>
@@ -110,7 +114,7 @@ export const WishItemComponent = (props: PropsWithChildren<Props>) => {
                         </Box>
                         <Spacer />
                         <Center w='100%' color='white'>
-                            <Button colorScheme='blue' size='lg' w="100%" onClick={onClose}>D&apos;acord</Button>
+                            <Button colorScheme='yellow' size='lg' w="100%" onClick={onClose}>Jo us ho regalo!</Button>
                         </Center>
                     </VStack>
                 </ModalBody>
