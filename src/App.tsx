@@ -1,8 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React, {useEffect, useState} from 'react';
 import Loader from "./components/Loader";
-import {BackgroundDrop, CenterInScreen, ContentWrap, Middle} from "./GlobalCss";
-import {Badge, Box, Center, Flex, ListItem, Text, UnorderedList} from "@chakra-ui/react";
+import {BackgroundDrop, CenterInScreen} from "./GlobalCss";
 import {WishItem} from "./model/WishItem";
 import {WishItemsPage} from "./pages/WishItemsPage";
 import {ItemRequest, SendItemsRequest} from "./model/SendItemsRequest";

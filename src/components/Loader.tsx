@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import {keyframes, css} from '@emotion/react';
 import {BackgroundDrop, CenterInScreen} from "../GlobalCss";
-import {Spinner} from "@chakra-ui/react";
 
 const Animation = keyframes`
   0% {

@@ -16,7 +16,7 @@ import {GiftDescriptionContainer, GiftDescriptionText} from "../AppStyledCompone
 import {css} from "@emotion/react";
 import {WishItem} from "../model/WishItem";
 import {WishItemComponent} from "../components/WishItemComponent";
-import React, {PropsWithChildren, SetStateAction, useEffect, useState} from "react";
+import React, {PropsWithChildren, SetStateAction, useState} from "react";
 import {ErrorSelectWishOrName} from "../components/ErrorSelectWishOrName";
 import {BeforeSendFormModal} from "../components/BeforeSendFormModal";
 

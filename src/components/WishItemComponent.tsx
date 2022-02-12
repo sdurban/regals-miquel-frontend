@@ -66,7 +66,7 @@ export const WishItemComponent = (props: PropsWithChildren<Props>) => {
                         En tenim: {props.wishItem.tenim}/{props.wishItem.total}
                     </Badge>
                 </Box>
-                {props.wishItem.comprare != undefined && props.wishItem.comprare > 0 && (<Box marginTop='4px'>
+                {props.wishItem.comprare !== undefined && props.wishItem.comprare > 0 && (<Box marginTop='4px'>
                     <Badge display="table" margin="0 auto" borderRadius='full' px='2' colorScheme={'green'}>
                         En regalo: {props.wishItem.comprare}
                     </Badge>
@@ -101,10 +101,10 @@ export const WishItemComponent = (props: PropsWithChildren<Props>) => {
                                 En tenim: {props.wishItem.tenim}/{props.wishItem.total}
                             </Badge>
                         </Box>
-                        {props.wishItem.comentaris != '' && (<Box>
+                        {props.wishItem.comentaris !== '' && (<Box>
                             <Text fontSize="xl">Comentaris:</Text>
                             <Text fontSize='md'>{props.wishItem.comentaris}</Text>
-                            {props.wishItem.id == "66" &&
+                            {props.wishItem.id === "66" &&
                                 <Text fontSize='md' mt={1}>
                                     <Ahref target="_blank" href='https://criatures.ara.cat/criatures/panera-dels-tresors_1_1415994.html'>
                                         Diarí Ara

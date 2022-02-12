@@ -5,8 +5,7 @@ import {
     ModalBody, ModalCloseButton,
     ModalContent, ModalFooter, ModalHeader,
     ModalOverlay,
-    Text, UnorderedList,
-    VStack
+    UnorderedList,
 } from "@chakra-ui/react";
 import React, {PropsWithChildren} from "react";
 
