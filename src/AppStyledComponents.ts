@@ -18,3 +18,8 @@ export const GiftDescriptionText = styled.div`
         margin-top: 20px;
     }
 `;
+
+export const Ahref = styled.a`
+    text-decoration: underline;
+    color: blue;
+`;

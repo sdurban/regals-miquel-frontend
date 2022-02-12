@@ -2,11 +2,14 @@
 import React, {useEffect, useState} from 'react';
 import Loader from "./components/Loader";
 import {BackgroundDrop, CenterInScreen, ContentWrap, Middle} from "./GlobalCss";
-import {Text} from "@chakra-ui/react";
+import {Badge, Box, Center, Flex, ListItem, Text, UnorderedList} from "@chakra-ui/react";
 import {WishItem} from "./model/WishItem";
 import {WishItemsPage} from "./pages/WishItemsPage";
+import {ItemRequest, SendItemsRequest} from "./model/SendItemsRequest";
+import {ThankYouPage} from "./pages/ThankYouPage";
 
 function App() {
+    const MIQUEL_WEBHOOK = "https://n8n.durban.cat/webhook/miquel-list";
   const [error, setError] = useState<Error|null>(null);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [sending, setIsSending] = useState<boolean>(false);
@@ -25,8 +28,40 @@ function App() {
       setItems(items);
     }
 
+    const sendRegals = (): void => {
+        const postBody: SendItemsRequest = {
+            nom: regaladorName,
+            items: items.filter((it) => it.comprare != null && it.comprare > 0).map((it): ItemRequest => {
+                return {
+                    id: it.id,
+                    quantity: it.comprare!,
+                }
+            })
+        };
+
+        const requestMetadata = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            mode: 'cors',
+            redirect: 'follow',
+            body: JSON.stringify(postBody)
+        };
+
+        setIsSending(true);
+
+        // @ts-ignore
+        fetch("https://n8n.durban.cat/webhook-test/miquel-list", requestMetadata)
+            .then(res => res.json())
+            .then(() => {
+                setIsSending(false);
+                setThankYou(true)
+            });
+    }
+
   useEffect(() => {
-    fetch("https://n8n.durban.cat/webhook/miquel-list")
+    fetch(MIQUEL_WEBHOOK)
         .then(res => res.json())
         .then(
             (result) => {
@@ -56,7 +91,10 @@ function App() {
       )
   } else if(thankYou) {
       return (
-          <Text>Thank you</Text>
+          <ThankYouPage
+              name={regaladorName}
+              items={items.filter((it) => it.comprare != null && it.comprare > 0)}
+          />
       )
   }
   return (
@@ -64,7 +102,9 @@ function App() {
           setRegaladorName={setRegaladorName}
           regaladorName={regaladorName}
           items={items}
-          updateComprare={updateComprare} />
+          updateComprare={updateComprare}
+          sendRegals={sendRegals}
+      />
   );
 }
 

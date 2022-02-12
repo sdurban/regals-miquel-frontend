@@ -29,11 +29,16 @@ interface CallbackUpdateComprare {
     (wishItemId: number|string, comprare: number): void;
 }
 
+interface SendRegalsCallback {
+    (): void;
+}
+
 export interface Props {
     setRegaladorName: CallbackSetRegaladorName;
     regaladorName: string;
     items: WishItem[];
     updateComprare: CallbackUpdateComprare;
+    sendRegals: SendRegalsCallback;
 }
 
 export const WishItemsPage = (props: PropsWithChildren<Props>) => {
@@ -59,7 +64,6 @@ export const WishItemsPage = (props: PropsWithChildren<Props>) => {
     const handleRegaladorNameChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
         props.setRegaladorName(e.target.value);
 
-        setHasSeletedAnyItem(selectedAnyItem())
         setHasWroteAnyName(wroteAnyName());
     }
 
@@ -91,6 +95,7 @@ export const WishItemsPage = (props: PropsWithChildren<Props>) => {
                             type='text'
                             value={props.regaladorName}
                             onChange={handleRegaladorNameChange}
+                            on
                         />
                         {!isError ? (
                             <FormHelperText>
@@ -128,6 +133,7 @@ export const WishItemsPage = (props: PropsWithChildren<Props>) => {
                 sendForm={() => {}}
                 nomUsuari={props.regaladorName}
                 items={selectedItems()}
+                sendRegals={props.sendRegals}
             />
         </>
     );
