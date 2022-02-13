@@ -41,7 +41,7 @@ export const BeforeSendFormModal = (props: PropsWithChildren<Props>) => {
                     Gracies {props.nomUsuari}, aquests son els objectes que has triat: <br/><br/>
                     <UnorderedList>
                         {props.items.map((item: WishItem) => {
-                            return (<ListItem>{item.item} (x{item.comprare}).</ListItem>)
+                            return (<ListItem key={item.id + "_wishList"}>{item.item} (x{item.comprare}).</ListItem>)
                         })}
                     </UnorderedList>
                 </ModalBody>

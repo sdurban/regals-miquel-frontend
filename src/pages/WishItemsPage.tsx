@@ -1,5 +1,6 @@
 import {ContentWrap, Middle} from "../GlobalCss";
 import {
+    Box,
     Button,
     Center,
     FormControl,
@@ -8,8 +9,8 @@ import {
     FormLabel,
     Input,
     SimpleGrid,
-    Stack,
-    Text, useDisclosure
+    Stack, Switch,
+    Text, useDisclosure, Spacer as ChakraSpacer
 } from "@chakra-ui/react";
 import {Spacer} from "../components/Spacer";
 import {GiftDescriptionContainer, GiftDescriptionText} from "../AppStyledComponents";
@@ -44,6 +45,7 @@ export interface Props {
 export const WishItemsPage = (props: PropsWithChildren<Props>) => {
     const modalError = useDisclosure();
     const modalConfirm = useDisclosure();
+    const [ onlyAvailable, setOnlyAvailable] = useState<boolean>(false);
     const [ hasSelectedAnyItem, setHasSeletedAnyItem] = useState<boolean>(false);
     const [ hasWroteAnyName, setHasWroteAnyName] = useState<boolean>(false);
 
@@ -66,6 +68,8 @@ export const WishItemsPage = (props: PropsWithChildren<Props>) => {
 
         setHasWroteAnyName(wroteAnyName());
     }
+
+    const handleChangeAvailable = () => setOnlyAvailable(!onlyAvailable);
 
     return (
         <>
@@ -105,10 +109,36 @@ export const WishItemsPage = (props: PropsWithChildren<Props>) => {
                             <FormErrorMessage>El nom es obligatori</FormErrorMessage>
                         )}
                     </FormControl>
+                    <Box mt={3} alignItems='flex-end'>
+                        <FormControl display='flex' >
+                            <ChakraSpacer />
+                            <FormLabel htmlFor='only-available' mb='0'>
+                                Mostrar nomes disponibles
+                            </FormLabel>
+                            <Switch id='only-available'
+                                    value={onlyAvailable.toString()}
+                                    onChange={handleChangeAvailable}
+                            />
+                            <Text>&nbsp;&nbsp;&nbsp;</Text>
+                        </FormControl>
+                    </Box>
                     <Spacer />
                     <SimpleGrid minChildWidth='180px' spacing='40px'>
-                        {props.items.filter((item: WishItem) => item.id !== "").map((item: WishItem) => {
-                            return (<WishItemComponent key={item.id} wishItem={item} updateComprare={updateItem} />);
+                        {props.items.filter((item: WishItem) => {
+                            let condition = true;
+
+                            if (onlyAvailable) {
+                                condition = item.tenim !== item.total;
+                            }
+
+                            return item.id !== "" && condition;
+                        }).map((item: WishItem) => {
+                            return (
+                                <WishItemComponent
+                                    key={item.id}
+                                    wishItem={item}
+                                    updateComprare={updateItem}
+                                />);
                         })}
                     </SimpleGrid>
                     <br /> <br />
