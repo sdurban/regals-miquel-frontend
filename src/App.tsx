@@ -51,7 +51,7 @@ function App() {
         setIsSending(true);
 
         // @ts-ignore
-        fetch("https://n8n.durban.cat/webhook-test/miquel-list", requestMetadata)
+        fetch(MIQUEL_WEBHOOK, requestMetadata)
             .then(res => res.json())
             .then(() => {
                 setIsSending(false);
