@@ -38,7 +38,7 @@ export const BeforeSendFormModal = (props: PropsWithChildren<Props>) => {
                 <ModalHeader><Center>Confirmació formulari</Center></ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    Gracies {props.nomUsuari}, aquests son els objectes que has triat: <br/><br/>
+                    Gràcies {props.nomUsuari}, aquests son els objectes que has triat: <br/><br/>
                     <UnorderedList>
                         {props.items.map((item: WishItem) => {
                             return (<ListItem key={item.id + "_wishList"}>{item.item} (x{item.comprare}).</ListItem>)
