@@ -114,7 +114,7 @@
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
       "position": [
-        780,
+        760,
         60
       ]
     },
@@ -131,7 +131,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 1,
       "position": [
-        960,
+        940,
         60
       ],
       "credentials": {
@@ -140,6 +140,38 @@
           "name": "Lista bebe sheet"
         }
       }
+    },
+    {
+      "parameters": {
+        "chatId": "671402833",
+        "text": "={{$node[\"Prepare telegram bot\"].json[\"texto\"]}}",
+        "additionalFields": {}
+      },
+      "name": "Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        940,
+        280
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "4",
+          "name": "Miquel Regals Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "// You can write logs to the browser console\nconst selectedUserItems = $items(\"Parse Body\").map((e) => e.json)[0];\nconst allGifts = $items(\"Read Sheet\").map((e) => e.json);\n\nvar texto = \"Hola hemos recibido un regalo nuevo de \" + selectedUserItems.nom + \":\";\n\nfor (const gift of allGifts) {\n  for (const selectedUserItem of selectedUserItems.items) {\n    if (gift.id == selectedUserItem.id) {\n      texto += gift.item + \" (x\" + selectedUserItem.quantity + \"), \";\n    }\n  }\n}\n\nreturn [{json: {\n  texto: texto\n}}];"
+      },
+      "name": "Prepare telegram bot",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        760,
+        280
+      ]
     }
   ],
   "connections": {
@@ -159,6 +191,11 @@
         [
           {
             "node": "Update Sheet Logic",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Prepare telegram bot",
             "type": "main",
             "index": 0
           }
@@ -208,6 +245,17 @@
           },
           {
             "node": "Redis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare telegram bot": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
             "type": "main",
             "index": 0
           }
