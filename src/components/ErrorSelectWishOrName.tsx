@@ -24,7 +24,7 @@ export const ErrorSelectWishOrName = (props: PropsWithChildren<Props>) => {
                 <ModalHeader><Center>Error al formulari</Center></ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    Hi ha un problema amb l'enviament: <br/><br/>
+                    Hi ha un problema en l'enviament: <br/><br/>
                     <UnorderedList>
                         {!props.hasWroteAnyName
                             &&

@@ -12,10 +12,10 @@ export const ThankYouPage =  (props: PropsWithChildren<Props>) => {
         <Center h="100vh">
         <Box p="5" w="md" borderWidth="1px" backgroundColor={"white"}>
             <Text mt={2} fontSize="xl" fontWeight="semibold" lineHeight="short" textAlign="center">
-                Moltes gracies {props.name}!!
+                Moltes gràcies {props.name}!!
             </Text>
             <Text mt={10}>
-                Has triat els seguents items:
+                Has triat els següents items:
                 <UnorderedList>
                     {props.items.map((item: WishItem) => {
                         return (<ListItem>{item.item} (x{item.comprare}).</ListItem>)
