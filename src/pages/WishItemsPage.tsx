@@ -77,7 +77,7 @@ export const WishItemsPage = (props: PropsWithChildren<Props>) => {
                 <ContentWrap>
                     <Stack spacing={3}>
                         <br /><br />
-                        <Center><Text fontSize="2xl">Llista regals miquel</Text></Center>
+                        <Center><Text fontSize="2xl">Llista regals Miquel</Text></Center>
                     </Stack>
                     <Spacer />
                     <GiftDescriptionContainer>
