@@ -6,7 +6,7 @@ import {
     Modal, ModalBody,
     ModalContent,
     ModalOverlay,
-    useDisclosure, useNumberInput, HStack, Input, VStack, Center, Text, Flex
+    useDisclosure, useNumberInput, HStack, Input, VStack, Center, Text, Flex, ModalCloseButton
 } from "@chakra-ui/react";
 import {WishItem} from "../model/WishItem";
 import React, {PropsWithChildren} from "react";
@@ -79,6 +79,9 @@ export const WishItemComponent = (props: PropsWithChildren<Props>) => {
         <Modal isOpen={isOpen} onClose={onClose} size="lg">
             <ModalOverlay />
             <ModalContent>
+                <ModalCloseButton
+                    backgroundColor={"white"}
+                />
                 <ModalBody>
                     <VStack>
                         <Box>
