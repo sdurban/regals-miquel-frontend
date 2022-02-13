@@ -1,0 +1,41 @@
+version: '3'
+
+networks:
+  web:
+    external: true
+
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    restart: unless-stopped
+    env_file: .env
+    expose:
+      - "5678"
+    networks:
+      - default
+      - web
+    volumes:
+      -  /opt/n8n/.n8n:/home/node/.n8n
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.n8n.rule=Host(`${N8N_HOST}`)"
+      - "traefik.http.routers.n8n.entryPoints=web"
+      - "traefik.http.services.n8n.loadbalancer.server.port=5678"
+      - "traefik.http.routers.n8n-ssl.rule=Host(`${N8N_HOST}`)"
+      - "traefik.http.routers.n8n-ssl.entryPoints=websecure"
+      - "traefik.http.routers.n8n-ssl.tls=true"
+      - "traefik.http.routers.n8n-ssl.service=n8n"
+      - "traefik.http.routers.n8n-ssl.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.n8n-ssl.middlewares=my-traefik-plugin-cors@file, traefik-forward-auth"
+      - "com.centurylinklabs.watchtower.enable=true"
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    networks:
+      - default
+    volumes:
+      - ./redis-data:/var/lib/redis
+    expose:
+      - 6379
+    container_name: n8n-redis

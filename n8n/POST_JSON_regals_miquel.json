@@ -1,0 +1,221 @@
+{
+  "name": "POST JSON regals miquel",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [
+        240,
+        -20
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "miquel-list",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        140
+      ],
+      "webhookId": "9dea10d4-d56c-445f-b708-ec9af249b521"
+    },
+    {
+      "parameters": {
+        "mode": "wait"
+      },
+      "name": "Merge",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 1,
+      "position": [
+        600,
+        60
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"worked\": \"ok\"}",
+        "options": {}
+      },
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1180,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "sheetId": "1AX81qelyMWHehM9PqOi6VZqv3YMz0tm7XGVi0ZvLIts",
+        "range": "A:H",
+        "dataStartRow": 3,
+        "keyRow": 2,
+        "options": {}
+      },
+      "name": "Read Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        420,
+        -20
+      ],
+      "credentials": {
+        "googleApi": {
+          "id": "2",
+          "name": "Lista bebe sheet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "const newItem = [{json: {}}];\n\nnewItem[0].json = items[0].json.body;\n\nreturn newItem;"
+      },
+      "name": "Parse Body",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        420,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "key": "lista-bebe-sheet"
+      },
+      "name": "Redis",
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        1180,
+        -40
+      ],
+      "credentials": {
+        "redis": {
+          "id": "3",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "// You can write logs to the browser console\nconst selectedUserItems = $items(\"Parse Body\").map((e) => e.json)[0];\nconst allGifts = $items(\"Read Sheet\").map((e) => e.json);\n\nconst answerGifts = [];\nvar i = 0;\n\nconsole.log(allGifts);\n\nconsole.log(selectedUserItems);\n\nfor (const gift of allGifts) {\n  for (const selectedUserItem of selectedUserItems.items) {\n    if (gift.id == selectedUserItem.id) {\n      gift.tenim = parseInt(gift.tenim) + parseInt(selectedUserItem.quantity);\n      gift.regalador = gift.regalador + \", \" + selectedUserItems.nom;\n    }\n\n    answerGifts[i] = {};\n    answerGifts[i].json = gift;\n  }\n    i++;\n}\n\nreturn answerGifts;"
+      },
+      "name": "Update Sheet Logic",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        780,
+        60
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "sheetId": "1AX81qelyMWHehM9PqOi6VZqv3YMz0tm7XGVi0ZvLIts",
+        "range": "A:H",
+        "dataStartRow": 3,
+        "keyRow": 2,
+        "options": {}
+      },
+      "name": "Update Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        960,
+        60
+      ],
+      "credentials": {
+        "googleApi": {
+          "id": "2",
+          "name": "Lista bebe sheet"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Parse Body",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Update Sheet Logic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Sheet": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Body": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Update Sheet Logic": {
+      "main": [
+        [
+          {
+            "node": "Update Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Sheet": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Redis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {},
+  "id": 3
+}

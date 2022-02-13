@@ -1,0 +1,11 @@
+[http]
+  [http.middlewares]
+    [http.middlewares.my-traefik-plugin-cors]
+      [http.middlewares.my-traefik-plugin-cors.plugin]
+        [http.middlewares.my-traefik-plugin-cors.plugin.traefik-cors]
+          allowCredentials = false
+          allowHeaders = ["Content-Type"]
+          allowMethods = ["GET", "POST", "OPTION", "HEAD", "PUT"]
+          allowOrigins = ["http://localhost.sandbox:3000"]
+          exposeHeaders = []
+          maxAge = -1
